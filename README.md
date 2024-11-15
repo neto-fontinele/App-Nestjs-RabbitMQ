@@ -8,26 +8,26 @@ docker compose up
 
 * Visualize as mensages que foram criadas em
 
-```json
-(GET) http://localhost:3001/orders
-```
+_(GET) http://localhost:3001/orders_
 
 - Para criar uma mensagem
 
+_(POST) http://localhost:3001/orders_
+
+- Request:
+
 ```json
-(POST) http://localhost:3001/orders
-
-Body:
-
 {
-	"productName": "alfredo@gmail.com",
-	"email": "alfredo@gmail.com",
-	"quantity": 10
+  "productName": "alfredo@gmail.com",
+  "email": "alfredo@gmail.com",
+  "quantity": 10
 }
+```
 
-Response:
+- Response:
 
+```json
 {
-	"message": "Order Placed!"
+  "message": "Order Placed!"
 }
 ```
