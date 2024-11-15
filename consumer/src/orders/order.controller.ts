@@ -1,5 +1,11 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern, Payload } from '@nestjs/microservices';
+import {
+  Ctx,
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
 import { OrderDTO } from 'src/dtos/order-dto';
 import { OrdersService } from './orders.service';
 
@@ -10,5 +16,16 @@ export class OrderController {
   @EventPattern('order-placed')
   handleOrderPlaced(@Payload() order: OrderDTO) {
     return this.orderService.handleOrderPlaced(order);
+  }
+
+  @MessagePattern({ cmd: 'get-orders' })
+  handleGetOrders(@Ctx() context: RmqContext) {
+    console.log({
+      CONSUMER_CONTROLLER: {
+        message: context.getMessage(),
+      },
+    });
+
+    return this.orderService.getOrders();
   }
 }
