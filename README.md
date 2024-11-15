@@ -1,6 +1,6 @@
 Para rodar aplicação
 
-```json
+```txt
 docker compose up
 ```
 
