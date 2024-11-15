@@ -1,0 +1,44 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # Porta para comunicação
+      - "15672:15672" # Porta para a interface de administração
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - rabbitmq-network
+
+  producer:
+    build:
+      context: ./producer
+    container_name: producer
+    ports:
+      - "3001:3000" # Porta exposta pelo producer
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672 # Variável para acessar o RabbitMQ no serviço
+    command: npm run start:dev # Altere conforme o comando necessário para iniciar o app
+    networks:
+      - rabbitmq-network
+
+  consumer:
+    build:
+      context: ./consumer
+    container_name: consumer
+    ports:
+      - "3002:3000" # Porta exposta pelo consumer
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672 # Variável para acessar o RabbitMQ no serviço
+    command: npm run start:dev # Altere conforme o comando necessário para iniciar o app
+    networks:
+      - rabbitmq-network
+
+networks:
+  rabbitmq-network:
+    driver: bridge
